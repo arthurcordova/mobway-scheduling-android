@@ -16,8 +16,6 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_intro.*
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -42,6 +40,11 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         show(buttonGoogle)
     }
 
+    override fun onResume() {
+        super.onResume()
+        mFirebaseAuthListner?.let { mFirebaseAuth?.addAuthStateListener(it) }
+    }
+
     private fun startFirebaseAuth() {
         val gsio = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -57,8 +60,14 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
         mFirebaseAuthListner = FirebaseAuth.AuthStateListener {
             if (it.currentUser != null) {
-                Picasso.get().load(it.currentUser?.photoUrl).into(imageAccount)
+//                Picasso.get().load(it.currentUser?.photoUrl).into(imageAccount)
             }
+        }
+    }
+
+    private fun updateUI(user: FirebaseUser?, isSuccessful: Boolean = false) {
+        if (isSuccessful) {
+
         }
     }
 
@@ -86,11 +95,6 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        mFirebaseAuthListner?.let { mFirebaseAuth?.addAuthStateListener(it) }
-    }
-
     fun signIn() {
         val intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
         startActivityForResult(intent, RC_SIGN_IN)
@@ -109,10 +113,16 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
     }
 
-    fun updateUI(user: FirebaseUser?, isSuccessful: Boolean = false) {
-        if (isSuccessful) {
+    fun firebaseSignInWithEmail(login: String, pwd: String) {
+        mFirebaseAuth?.signInWithEmailAndPassword(login, pwd)
+                ?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        updateUI(user = it.result.user, isSuccessful = true)
+                    } else {
+                        updateUI(user = null)
+                    }
+                }
 
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -123,7 +133,7 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             if (result.isSuccess) {
                 val account = result.signInAccount
 
-                Picasso.get().load(account?.photoUrl).into(imageAccount)
+//                Picasso.get().load(account?.photoUrl).into(imageAccount)
 
                 firebaseSignInGoogle(account!!)
             } else {
@@ -151,7 +161,6 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             R.id.buttonSignInOneTap -> {
                 screenBehavior(true)
             }
-
         }
     }
 
