@@ -25,22 +25,9 @@ import com.google.firebase.auth.*
 import com.squareup.picasso.Picasso
 
 
-class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
-
-
-    val RC_SIGN_IN: Int = 9001
-//    var googleApiClient: GoogleApiClient? = null
-//    var firebaseAuth : FirebaseAuth? = null
-//    var firebaseAuthListner : FirebaseAuth.AuthStateListener? = null
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-
-    }
+class IntroActivity : AppCompatActivity() {
 
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
-    var googleApiClient: GoogleApiClient? = null
-    var firebaseAuth : FirebaseAuth? = null
-    var firebaseAuthListner : FirebaseAuth.AuthStateListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,92 +48,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             //            Crashlytics.getInstance().crash()
 //            Crashlytics.log("Teste crash")
 //            signIn(password = "hardcore87NY", email = "arthur.stapassoli@gmail.com")
-            signIn()
-        }
-
-
-        val gsio = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .build()
-
-
-
-        googleApiClient = GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gsio)
-                .build()
-
-        firebaseAuth = FirebaseAuth.getInstance()
-
-        firebaseAuthListner = FirebaseAuth.AuthStateListener {
-            if (it.currentUser != null) {
-                Picasso.get().load(it.currentUser?.photoUrl).into(imageAccount)
-            }
-        }
-
-
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        firebaseAuthListner?.let { firebaseAuth?.addAuthStateListener(it) }
-    }
-
-
-    fun signIn() {
-        val intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
-        startActivityForResult(intent, RC_SIGN_IN)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result.isSuccess) {
-                val account = result.signInAccount
-
-                Picasso.get().load(account?.photoUrl).into(imageAccount)
-
-                firebaseSignInGoogle(account!!)
-            } else {
-
-            }
-        }
-    }
-
-    fun firebaseSignInGoogle(googleSignInAccount: GoogleSignInAccount) {
-        val credentials = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
-        firebaseAuth?.signInWithCredential(credentials)
-                ?.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        updateUI(user = it.result.user, isSuccessful = true)
-                    } else {
-                        updateUI(user = null)
-                    }
-                }
-
-    }
-
-//    fun firebaseSignInEmail(email: String, pwd:String) {
-//        val credentials = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
-//        val firebaseAuth = FirebaseAuth.getInstance()
-//        firebaseAuth.signInWithCredential(credentials)
-//                .addOnCompleteListener {
-//                    if (it.isSuccessful) {
-//                        updateUI(user = it.result.user, isSuccessful = true)
-//                    } else {
-//                        updateUI(user = null)
-//                    }
-//                }
-//
-//    }
-
-    fun updateUI(user: FirebaseUser?, isSuccessful: Boolean = false) {
-        if (isSuccessful) {
-
+//            signIn()
         }
     }
 

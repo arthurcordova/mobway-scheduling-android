@@ -37,7 +37,7 @@
     </style>
 
 
-    <!-- TEXT VIEW-->
+    <!-- BUTTON -->
     <style name="NormalButton" parent="android:Widget.Button">
         <item name="android:fontFamily">@font/ample_soft_normal</item>
         <item name="android:textSize">@dimen/font_normal</item>
@@ -50,6 +50,12 @@
 
     <style name="ButtonDark" parent="NormalButton">
         <item name="android:textColor">@color/colorWhite100</item>
+    </style>
+
+    <!-- INPUT LAYOUT -->
+    <style name="TextHintLabel" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">8sp</item>
+        <item name="android:fontFamily">@font/ample_soft_normal</item>
     </style>
 
 </resources>

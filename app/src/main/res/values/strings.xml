@@ -8,4 +8,10 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="label_sign_in_with_facebook">Entrar com o facebook</string>
     <string name="label_sign_in_with_google">Entrar com o Google</string>
+    <string name="label_consults_exams">Consultas | Exames</string>
+    <string name="label_already_account">Já tenho uma conta</string>
+    <string name="label_sign_in_one_tap">Logar com um toque</string>
+    <string name="label_sign_in">Entrar</string>
+    <string name="label_email">E-mail</string>
+    <string name="label_password">Senha</string>
 </resources>
