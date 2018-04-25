@@ -1,4 +1,4 @@
-package br.com.mobway.agenda
+package br.com.mobway.agendai
 
 import android.content.Intent
 import android.support.design.widget.TabLayout
@@ -16,22 +16,19 @@ import android.view.ViewGroup
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.GoogleApiClient
 
 import kotlinx.android.synthetic.main.activity_intro.*
 import kotlinx.android.synthetic.main.fragment_intro.view.*
-import com.google.firebase.auth.FirebaseAuth
 import com.google.android.gms.common.ConnectionResult
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.GoogleAuthCredential
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
+import com.squareup.picasso.Picasso
 
 
 class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
 
 
-    val RC_SIGN_IN : Int = 9001
+    val RC_SIGN_IN: Int = 9001
 //    var googleApiClient: GoogleApiClient? = null
 //    var firebaseAuth : FirebaseAuth? = null
 //    var firebaseAuthListner : FirebaseAuth.AuthStateListener? = null
@@ -41,8 +38,9 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     }
 
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
-    var auth = FirebaseAuth.getInstance()!!
-    var googleApiClient : GoogleApiClient? = null
+    var googleApiClient: GoogleApiClient? = null
+    var firebaseAuth : FirebaseAuth? = null
+    var firebaseAuthListner : FirebaseAuth.AuthStateListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,37 +57,45 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
 
-//        FacebookSdk.sdkInitialize(applicationContext)
-
         fab.setOnClickListener { view ->
-//            Crashlytics.getInstance().crash()
+            //            Crashlytics.getInstance().crash()
 //            Crashlytics.log("Teste crash")
 //            signIn(password = "hardcore87NY", email = "arthur.stapassoli@gmail.com")
             signIn()
         }
 
 
-        val gsio = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail()
+        val gsio = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .build()
+
+
 
         googleApiClient = GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gsio)
                 .build()
 
-        val firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
 
-        val firebaseAuthListner = FirebaseAuth.AuthStateListener {
+        firebaseAuthListner = FirebaseAuth.AuthStateListener {
             if (it.currentUser != null) {
-
+                Picasso.get().load(it.currentUser?.photoUrl).into(imageAccount)
             }
         }
 
-        firebaseAuth.addAuthStateListener(firebaseAuthListner)
+
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        firebaseAuthListner?.let { firebaseAuth?.addAuthStateListener(it) }
+    }
 
-    fun signIn(){
+
+    fun signIn() {
         val intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         startActivityForResult(intent, RC_SIGN_IN)
     }
@@ -99,28 +105,49 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
         if (requestCode == RC_SIGN_IN) {
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result.isSuccess){
+            if (result.isSuccess) {
                 val account = result.signInAccount
-                firebaseSignIntGoogle(account!!)
+
+                Picasso.get().load(account?.photoUrl).into(imageAccount)
+
+                firebaseSignInGoogle(account!!)
             } else {
 
             }
-
         }
     }
 
-    fun firebaseSignIntGoogle(googleSignInAccount: GoogleSignInAccount) {
+    fun firebaseSignInGoogle(googleSignInAccount: GoogleSignInAccount) {
         val credentials = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
-        val firebaseAuth = FirebaseAuth.getInstance()
-        firebaseAuth.signInWithCredential(credentials)
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        //TODO LOGIN OK
+        firebaseAuth?.signInWithCredential(credentials)
+                ?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        updateUI(user = it.result.user, isSuccessful = true)
                     } else {
-                        //TODO LOGIN FAIL
+                        updateUI(user = null)
                     }
                 }
 
+    }
+
+//    fun firebaseSignInEmail(email: String, pwd:String) {
+//        val credentials = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
+//        val firebaseAuth = FirebaseAuth.getInstance()
+//        firebaseAuth.signInWithCredential(credentials)
+//                .addOnCompleteListener {
+//                    if (it.isSuccessful) {
+//                        updateUI(user = it.result.user, isSuccessful = true)
+//                    } else {
+//                        updateUI(user = null)
+//                    }
+//                }
+//
+//    }
+
+    fun updateUI(user: FirebaseUser?, isSuccessful: Boolean = false) {
+        if (isSuccessful) {
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

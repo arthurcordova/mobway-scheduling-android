@@ -1,4 +1,4 @@
-package br.com.mobway.agenda.push
+package br.com.mobway.agendai.push
 
 import android.util.Log
 import com.google.firebase.iid.FirebaseInstanceId

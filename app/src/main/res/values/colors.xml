@@ -2,5 +2,13 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#45DE84</color>
+
+    <color name="colorBackground">#ECECEC</color>
+    <color name="colorPrimaryText">#404040</color>
+    <color name="colorSecondaryText">#696969</color>
+    <color name="colorRed">#FA496E</color>
+    <color name="colorBlueFacebook">#2553B4</color>
+    <color name="colorWhite100">#ffffff</color>
+
 </resources>

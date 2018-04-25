@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "381332215711-8ff0eftoqvc4nbpbsrgti5fguola47uo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.mobway.agenda",
+            "certificate_hash": "702837a898af5731034587d97dee581ea0da479f"
+          }
+        },
+        {
           "client_id": "381332215711-fetdri14rbe47srmjur0oeldr1pn5tbk.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,57 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381332215711-fetdri14rbe47srmjur0oeldr1pn5tbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381332215711:android:1c3081e5e0c1dcce",
+        "android_client_info": {
+          "package_name": "br.com.mobway.agendai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381332215711-5gn8esbe2ar7npj5uvgijotp8qok50qp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.mobway.agendai",
+            "certificate_hash": "702837a898af5731034587d97dee581ea0da479f"
+          }
+        },
+        {
+          "client_id": "381332215711-fetdri14rbe47srmjur0oeldr1pn5tbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnvNx5Z9rnYafWcLSlgAJ4OQ6XD4kW_ec"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381332215711-fetdri14rbe47srmjur0oeldr1pn5tbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

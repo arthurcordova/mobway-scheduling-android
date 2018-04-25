@@ -1,9 +1,9 @@
-package br.com.mobway.agenda.push
+package br.com.mobway.agendai.push
 
 import android.app.NotificationManager
 import android.content.Context
 import android.support.v4.app.NotificationCompat
-import br.com.mobway.agenda.R
+import br.com.mobway.agendai.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 

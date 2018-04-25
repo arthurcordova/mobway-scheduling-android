@@ -1,4 +1,4 @@
-package br.com.mobway.agenda
+package br.com.mobway.agendai
 
 import org.junit.Test
 
