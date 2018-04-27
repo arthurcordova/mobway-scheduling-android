@@ -17,4 +17,8 @@
 
     <color name="colorWhite100">#ffffff</color>
 
+    <color name="colorIntroBlue">#69CCEB</color>
+    <color name="colorIntroGreen">#94DA65</color>
+    <color name="colorIntroOrange">#FCB744</color>
+
 </resources>

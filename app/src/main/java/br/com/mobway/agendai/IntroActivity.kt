@@ -8,48 +8,39 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
+import android.support.v7.content.res.AppCompatResources
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.GoogleApiClient
 
 import kotlinx.android.synthetic.main.activity_intro.*
-import kotlinx.android.synthetic.main.fragment_intro.view.*
-import com.google.android.gms.common.ConnectionResult
-import com.google.firebase.auth.*
-import com.squareup.picasso.Picasso
-
+import kotlinx.android.synthetic.main.fragment_intro_one.view.*
+import android.view.WindowManager
 
 class IntroActivity : AppCompatActivity() {
 
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
-        setSupportActionBar(toolbar)
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
-        // Set up the ViewPager with the sections adapter.
         container.adapter = mSectionsPagerAdapter
-
+        tabs.setupWithViewPager(container)
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
 
-        fab.setOnClickListener { view ->
-            //            Crashlytics.getInstance().crash()
-//            Crashlytics.log("Teste crash")
-//            signIn(password = "hardcore87NY", email = "arthur.stapassoli@gmail.com")
-//            signIn()
+        buttonStartNow.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -79,13 +70,10 @@ class IntroActivity : AppCompatActivity() {
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1)
         }
 
         override fun getCount(): Int {
-            // Show 3 total pages.
             return 3
         }
     }
@@ -97,9 +85,33 @@ class IntroActivity : AppCompatActivity() {
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
-            val rootView = inflater.inflate(R.layout.fragment_intro, container, false)
-//            rootView.section_label.text = getString(R.string.section_format, arguments?.getInt(ARG_SECTION_NUMBER))
+            val index = arguments?.get(ARG_SECTION_NUMBER)
 
+            val rootView = inflater.inflate(R.layout.fragment_intro_one, container, false)
+            when (index) {
+                1 -> {
+                    rootView.imageBg.setImageDrawable(context?.let { AppCompatResources.getDrawable(it, R.drawable.bg_intro_one) })
+                    rootView.labelTitle.text = getText(R.string.label_title_intro_one)
+                    rootView.labelSubtitle.text = getText(R.string.label_subtitle_intro_one)
+                    rootView.imageCenter.setImageDrawable(context?.let { AppCompatResources.getDrawable(it, R.drawable.ic_scheduling) })
+
+                }
+                2 -> {
+                    rootView.imageBg.setImageDrawable(context?.let { AppCompatResources.getDrawable(it, R.drawable.bg_intro_two) })
+                    rootView.labelTitle.text = getText(R.string.label_title_intro_two)
+                    rootView.labelSubtitle.text = getText(R.string.label_subtitle_intro_two)
+                    rootView.imageCenter.setImageDrawable(context?.let { AppCompatResources.getDrawable(it, R.drawable.ic_notifications) })
+
+                }
+                3 -> {
+                    rootView.imageBg.setImageDrawable(context?.let { AppCompatResources.getDrawable(it, R.drawable.bg_intro_three) })
+                    rootView.labelTitle.text = getText(R.string.label_title_intro_three)
+                    rootView.labelSubtitle.text = getText(R.string.label_subtitle_intro_three)
+                    rootView.imageCenter.setImageDrawable(context?.let { AppCompatResources.getDrawable(it, R.drawable.ic_wallet) })
+
+                }
+
+            }
             return rootView
         }
 

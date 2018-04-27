@@ -29,4 +29,11 @@
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+    <string name="label_start_now">Começar agora</string>
+    <string name="label_title_intro_one">Somos o seu app de agendamentos médicos!</string>
+    <string name="label_title_intro_two">Lembramos você!</string>
+    <string name="label_title_intro_three">Pague pelo app!</string>
+    <string name="label_subtitle_intro_one">Pesquise por médicos e clinicas e agende seus exames e consultas de maneira fácil e rápida.</string>
+    <string name="label_subtitle_intro_two">Fique tranquilo, Lembramos você das datas das suas consultas e exames.</string>
+    <string name="label_subtitle_intro_three">Pague pelo app  e receba desconstos. Ou informe os dados do seu plano de sáude.</string>
 </resources>
