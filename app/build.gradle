@@ -35,19 +35,25 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${tools_version}"
     implementation "com.android.support:design:${tools_version}"
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation "com.android.support:support-v4:${tools_version}"
 
     implementation 'com.google.firebase:firebase-core:15.0.0'
     implementation 'com.google.firebase:firebase-messaging:15.0.0'
     implementation 'com.google.firebase:firebase-auth:15.0.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.2'
     implementation 'com.facebook.android:facebook-login:4.32.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'com.android.support:support-v4:27.1.1'
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

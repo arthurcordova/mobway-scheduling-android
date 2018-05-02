@@ -8,6 +8,11 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.Toast
+import br.com.mobway.agendai.data.User
+import br.com.mobway.agendai.preference.UserPreferences
+import br.com.mobway.agendai.viewmodel.LoginViewModel
+import br.com.mobway.agendai.viewmodel.ViewModel
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -16,6 +21,9 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -24,6 +32,7 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     private var mGoogleApiClient: GoogleApiClient? = null
     private var mFirebaseAuth: FirebaseAuth? = null
     private var mFirebaseAuthListner: FirebaseAuth.AuthStateListener? = null
+    private var loginViewModel = App.injectLoginViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,11 +47,20 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
         show(buttonFacebook)
         show(buttonGoogle)
+
+
+        var user: User? = null
+
     }
 
     override fun onResume() {
         super.onResume()
         mFirebaseAuthListner?.let { mFirebaseAuth?.addAuthStateListener(it) }
+
+
+        val tk = UserPreferences(this).getString(UserPreferences.FCM_TOKEN)
+        Toast.makeText(this, "FCM_TOKEN: ${tk})", Toast.LENGTH_LONG).show()
+
     }
 
     private fun startFirebaseAuth() {
@@ -67,6 +85,27 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
     private fun updateUI(user: FirebaseUser?, isSuccessful: Boolean = false) {
         if (isSuccessful) {
+
+            val u = User(uid = user?.uid,
+                    email = user?.email,
+                    name = user?.displayName,
+                    gender = "male",
+                    fcmToken = "teste",
+                    phone = "867675875",
+                    isEmailVerified = user?.isEmailVerified,
+                    isFirstAccess = true,
+                    loginType = "google",
+                    photoUrl = user?.photoUrl?.toString())
+
+            loginViewModel.createUser(user = u!!)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ t ->
+                        Toast.makeText(applicationContext, t.uid, Toast.LENGTH_LONG).show()
+                    },{
+                        Toast.makeText(applicationContext, it.message, Toast.LENGTH_LONG).show()
+                    })
+
 
         }
     }
@@ -110,7 +149,6 @@ class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                         updateUI(user = null)
                     }
                 }
-
     }
 
     fun firebaseSignInWithEmail(login: String, pwd: String) {
